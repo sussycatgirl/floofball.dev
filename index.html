@@ -49,6 +49,7 @@
                 text-align: center;
                 padding: 16px;
                 user-select: none;
+                line-height: 24px;
             }
 
             .neocat-petted {
@@ -72,6 +73,10 @@
                 z-index: -100000;
                 filter: blur(30px) brightness(40%);
             }
+
+            #pet-hint {
+                transition: opacity 5s;
+            }
         </style>
     </head>
     <body>
@@ -83,6 +88,8 @@
         </div>
 
         <div class="footer">
+            <span id="pet-hint">Pet the neocat!</span>
+            <br />
             <a href="https://me.lea.pet">Visit my website</a>
             &middot;
             <a href="https://github.com/sussycatgirl/floofball.dev" target="_blank">Source Code</a>
@@ -143,7 +150,10 @@
     
                 let distance = Math.sqrt(Math.pow(distX, 2), Math.pow(distY, 2));
                 petted += distance;
-                if (petted > 50) total += distance;
+                if (petted > 50) {
+                    total += distance;
+                    document.getElementById("pet-hint").style.opacity = 0;
+                }
     
                 if (total > 1000 && !neocat_petted) {
                     neocat_petted = true;
