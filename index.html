@@ -2,8 +2,14 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preload" href="https://me.lea.pet/fonts/Roboto-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
         <style>
+            @font-face {
+                font-family: "Roboto";
+                src: url("https://me.lea.pet/fonts/Roboto-Regular.ttf");
+            }
+
             /* Too lazy to remake the actual animation from the game */
             @keyframes petted {
                 0% {
@@ -19,6 +25,13 @@
 
             body {
                 background-color: #2b2b2b;
+                color: #a8a8a8;
+                font-family: "Roboto", monospace;
+            }
+
+            a {
+                color: #b9b9b9;
+                text-decoration: none;
             }
 
             .outer {
@@ -28,13 +41,23 @@
                 height: 60vh;
             }
 
+            .footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                padding: 16px;
+                user-select: none;
+            }
+
             .neocat-petted {
                 position: fixed;
                 top: 50%;
                 left: 0%;
                 width: 100%;
                 height: auto;
-                transform: translateY(-50%);
+                transform: translateY(-60%);
                 
                 opacity: 0;
                 pointer-events: none;
@@ -54,8 +77,19 @@
     <body>
         <img src="/neocat_petted.png" class="neocat-petted" id="neocat-petted" />
         <img src="/background.jpg" class="background" />
+
         <div class="outer">
             <img src="/floofballs/neocat_floof.png" class="neocat" draggable="false" id="neocat" />
+        </div>
+
+        <div class="footer">
+            <a href="https://me.lea.pet">Visit my website</a>
+            &middot;
+            <a href="https://github.com/sussycatgirl/floofball.dev" target="_blank">Source Code</a>
+            &middot;
+            <a href="https://volpeon.ink/emojis/neocat/" target="_blank">Neocats</a> by Volpeon
+            &middot;
+            Background from <a href="https://unsplash.com/photos/white-kitten-Tn8DLxwuDMA" target="_blank">Unsplash</a>
         </div>
 
         <script>
