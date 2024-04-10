@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <style>
+            /* Too lazy to remake the actual animation from the game */
+            @keyframes petted {
+                0% {
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                70% {
+                    opacity: 0;
+                }
+            }
+
+            body {
+                background-color: #2b2b2b;
+            }
+
+            .outer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 60vh;
+            }
+
+            .neocat-petted {
+                position: fixed;
+                top: 50%;
+                left: 0%;
+                width: 100%;
+                height: auto;
+                transform: translateY(-50%);
+                
+                opacity: 0;
+                pointer-events: none;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="/neocat_petted.png" class="neocat-petted" id="neocat-petted" />
+        <div class="outer">
+            <img src="/floofballs/neocat_floof.png" class="neocat" draggable="false" id="neocat" />
+        </div>
+
+        <script>
+            const neocat = document.getElementById("neocat");
+            if (!neocat) {
+                throw "Neocat broke :(";
+            }
+    
+            function setNeocat(expression) {
+                neocat.src = expression
+                    ? `/floofballs/neocat_floof_${expression}.png`
+                    : `/floofballs/neocat_floof.png`;
+            }
+    
+            let clicked = false;
+            let moved = false;
+            let superHappy = false;
+            let defaultCat = "";
+            let neocat_petted = false;
+            let timeout;
+            neocat.onpointerdown = () => clicked = true;
+            neocat.onpointerup = () => {
+                clicked = false;
+                if (!moved && !superHappy) {
+                    defaultCat = "_w_";
+                    setNeocat("_w_");
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        defaultCat = "";
+                        setNeocat();
+                    }, 500);
+                }
+            }
+    
+            let prevX = null,
+                prevY = null,
+                petted = 0; // Counter for the neocat's expression
+                total = 0; // Counter for the "neocat petted"
+            neocat.onpointermove = (e) => {
+                if (!clicked) return;
+                moved = true;
+    
+                const x = e.clientX,
+                      y = e.clientY;
+    
+                const distX = Math.abs(x - (prevX ?? x)) / neocat.clientWidth * 50;
+                const distY = Math.abs(x - (prevY ?? y)) / neocat.clientHeight * 50;
+    
+                prevX = x;
+                prevY = y;
+    
+                let distance = Math.sqrt(Math.pow(distX, 2), Math.pow(distY, 2));
+                console.log(distance, petted)
+                petted += distance;
+                if (petted > 50) total += distance;
+    
+                if (total > 1000 && !neocat_petted) {
+                    neocat_petted = true;
+                    document.getElementById("neocat-petted").style.animation = "petted 10s";
+                }
+            }
+
+            setInterval(() => {
+                petted *= 0.9;
+
+                if (petted > 150) {
+                    setNeocat("_w_");
+                    superHappy = true;
+                }
+                else if (petted > 50 && !superHappy) setNeocat("happy");
+                else if (petted < 10) {
+                    setNeocat(defaultCat);
+                    superHappy = false;
+                }
+            }, 100);
+        </script>
+    </body>
+</html>
